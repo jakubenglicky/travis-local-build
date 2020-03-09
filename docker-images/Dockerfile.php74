@@ -1,0 +1,3 @@
+FROM peckadesign/php:7.4-dev
+
+COPY bin/travis_retry /usr/bin

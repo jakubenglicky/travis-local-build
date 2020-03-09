@@ -45,6 +45,9 @@ services:
 
   php74:
     image: peckadesign/php:7.4-dev
+    build:
+      context: .
+      dockerfile: Dockerfile.php74
 
 #  hhvm:
 #    image: fprochazka/travisci-php:hhvm
