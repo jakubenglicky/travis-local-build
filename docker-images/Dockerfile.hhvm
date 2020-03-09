@@ -1,11 +1,14 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV DEBCONF_NONINTERACTIVE_SEEN=true
 
-RUN apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0x5a16e7281be7a449 \
+RUN apt update && apt install -y curl gnupg
+
+RUN curl https://dl.hhvm.com/conf/hhvm.gpg.key | apt-key add - \
   && apt-get update -y && apt-get install -y software-properties-common \
-  && add-apt-repository "deb http://dl.hhvm.com/ubuntu xenial main" && apt-get update -y \
+  && apt-key finger 'opensource+hhvm@fb.com' \
+  && add-apt-repository https://dl.hhvm.com/ubuntu  && apt-get update -y  \
   && apt-get install -y hhvm
 
 RUN apt-get update -q \
@@ -22,7 +25,7 @@ RUN mkdir -p /usr/local/share/composer \
 	&& curl -o /tmp/composer-setup.php https://getcomposer.org/installer \
 	# Make sure we're installing what we think we're installing!
 	# https://composer.github.io/pubkeys.html
-	&& echo "669656bab3166a7aff8a7506b8cb2d1c292f042046c5a994c43155c0be6190fa0355160742ab2e1c88d40d5be660b410" > /tmp/composer-setup.sig \
+	&& echo "e0012edf3e80b6978849f5eff0d4b4e4c79ff1609dd1e613307e16318854d24ae64f26d17af3ef0bf7cfb710ca74755a" > /tmp/composer-setup.sig \
 	&& php -r "if (hash('SHA384', file_get_contents('/tmp/composer-setup.php')) !== trim(file_get_contents('/tmp/composer-setup.sig'))) { unlink('/tmp/composer-setup.php'); echo 'Invalid installer' . PHP_EOL; exit(1); }" \
 	&& php /tmp/composer-setup.php --no-ansi --install-dir=/usr/local/bin --filename=composer --snapshot \
 	&& rm -f /tmp/composer-setup.* \

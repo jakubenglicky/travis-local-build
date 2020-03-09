@@ -43,11 +43,14 @@ services:
       context: .
       dockerfile: Dockerfile.php73
 
-  hhvm:
-    image: fprochazka/travisci-php:hhvm
-    build:
-      context: .
-      dockerfile: Dockerfile.hhvm
+  php74:
+    image: peckadesign/php:7.4-dev
+
+#  hhvm:
+#    image: fprochazka/travisci-php:hhvm
+#    build:
+#      context: .
+#      dockerfile: Dockerfile.hhvm
 
   wait:
     image: fprochazka/travisci-wait:latest
